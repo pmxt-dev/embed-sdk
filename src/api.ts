@@ -262,6 +262,7 @@ export interface SubmitOrderRequest {
     readonly wait?: boolean;
     readonly maxCostUsdc?: number;
     readonly tokenAmount?: number;
+    readonly feeRate?: number;  // Partner fee rate (0-0.01), defaults to 0
 }
 
 export interface OrderResult {
@@ -272,6 +273,7 @@ export interface OrderResult {
     readonly usdcReceived?: number;
     readonly txHash?: string;
     readonly taskId?: number;
+    readonly feeAmount?: number;
 }
 
 export async function buildOrder(req: BuildOrderRequest): Promise<BuildOrderResult> {
@@ -280,7 +282,12 @@ export async function buildOrder(req: BuildOrderRequest): Promise<BuildOrderResu
 }
 
 export async function submitSignedOrder(req: SubmitOrderRequest): Promise<OrderResult> {
-    const res = await apiPost<OrderResult>('/v1/orders/submit', req);
+    const envFeeRate = typeof process !== 'undefined'
+        ? parseFloat(process.env.NEXT_PUBLIC_FEE_RATE ?? '0')
+        : 0;
+    const feeRate = req.feeRate ?? (envFeeRate > 0 ? envFeeRate : undefined);
+    const body = feeRate != null ? { ...req, feeRate } : req;
+    const res = await apiPost<OrderResult>('/v1/orders/submit', body);
     return res.data;
 }
 
@@ -458,4 +465,43 @@ export async function fetchPriceHistoryBatch(
         { tokenIds, interval, fidelity },
     );
     return res.data;
+}
+
+// --- Partner Accruals ---
+
+export interface PartnerAccrualSummary {
+    totalAccrued: number;
+    totalPaidOut: number;
+    outstandingBalance: number;
+    tradeCount: number;
+}
+
+export interface PartnerPayoutEntry {
+    id: number;
+    amount: number;
+    type: 'accrual' | 'payout';
+    tradeId: string | null;
+    note: string | null;
+    createdAt: string;
+}
+
+export async function getPartnerAccruals(): Promise<PartnerAccrualSummary> {
+    const res = await apiGet<PartnerAccrualSummary>('/v1/partner/accruals');
+    return res.data;
+}
+
+export async function getPartnerAccrualHistory(params?: {
+    limit?: number;
+    offset?: number;
+    type?: 'accrual' | 'payout';
+}): Promise<{ data: PartnerPayoutEntry[]; meta: { total: number; limit: number; offset: number } }> {
+    const res = await apiGet<PartnerPayoutEntry[]>('/v1/partner/accruals/history', { params });
+    return {
+        data: res.data,
+        meta: {
+            total: res.meta.total ?? 0,
+            limit: res.meta.limit ?? 50,
+            offset: res.meta.offset ?? 0,
+        },
+    };
 }

@@ -29,6 +29,8 @@ export {
     fetchBalance,
     fetchPositions,
     fetchTrades,
+    getPartnerAccruals,
+    getPartnerAccrualHistory,
 } from './api';
 
 export type {
@@ -45,4 +47,6 @@ export type {
     BuildTxResult,
     WithdrawalStatus,
     Trade,
+    PartnerAccrualSummary,
+    PartnerPayoutEntry,
 } from './api';
