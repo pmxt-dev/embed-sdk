@@ -1,13 +1,45 @@
 {
   "name": "@pmxt/sdk",
   "version": "0.1.0",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "dependencies": {
-    "@pmxt/components": "*"
+  "description": "TypeScript SDK for the PMXT Embed API -- fetch markets, place orders, manage portfolios",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmxt-dev/embed",
+    "directory": "packages/sdk"
+  },
+  "keywords": [
+    "prediction-markets",
+    "polymarket",
+    "sdk",
+    "api-client",
+    "trading",
+    "embed"
+  ],
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@pmxt/components": ">=0.1.0"
   },
   "devDependencies": {
+    "tsup": "^8.5.1",
     "typescript": "^5"
   }
 }
