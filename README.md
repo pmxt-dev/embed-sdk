@@ -15,11 +15,11 @@ npm install @pmxt/sdk
 The SDK reads configuration from environment variables:
 
 ```bash
-NEXT_PUBLIC_API_URL=https://api.yoursite.com   # API base URL (default: http://localhost:3001)
 NEXT_PUBLIC_API_KEY=your-api-key               # API key sent as X-API-Key header
+NEXT_PUBLIC_API_URL=https://custom-url.com     # optional, overrides the default PMXT API
 ```
 
-Set these in your `.env.local` (Next.js) or equivalent. All requests are authenticated automatically.
+Set these in your `.env.local` (Next.js) or equivalent. Only `NEXT_PUBLIC_API_KEY` is required -- the SDK hits the PMXT API by default.
 
 ## Quick Start
 

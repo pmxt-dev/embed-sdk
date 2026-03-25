@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'https://pmxt-white-label-integration-314657274629.europe-west1.run.app';
 
 const API_KEY = typeof window !== 'undefined'
     ? (process.env.NEXT_PUBLIC_API_KEY ?? '')
