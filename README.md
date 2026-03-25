@@ -19,7 +19,7 @@ NEXT_PUBLIC_API_KEY=your-api-key               # API key sent as X-API-Key heade
 NEXT_PUBLIC_API_URL=https://custom-url.com     # optional, overrides the default PMXT API
 ```
 
-Set these in your `.env.local` (Next.js) or equivalent. Only `NEXT_PUBLIC_API_KEY` is required -- the SDK hits the PMXT API by default.
+Set these in your `.env.local` (Next.js) or equivalent. Only `NEXT_PUBLIC_API_KEY` is required -- get yours from [pmxt.dev/dashboard](https://pmxt.dev/dashboard).
 
 ## Quick Start
 
